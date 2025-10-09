@@ -18,16 +18,11 @@ export default function PopularListCard({ item }: PopularListProps) {
       <div className="h-30 w-full md:h-36 lg:h-44">
         <PopularListPreview username={item.username} slug={item.slug} />
       </div>
-      <div className="p-3">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="text-foreground line-clamp-2 text-sm font-semibold group-hover:text-white">
-            {item.name}
-          </h3>
-          <span className="rounded-full bg-white/5 px-2 py-0.5 text-[11px] whitespace-nowrap text-white/80">
-            {item.viewCount.toLocaleString()} views
-          </span>
-        </div>
-        <p className="mt-2 text-xs text-white/60">@{item.username}</p>
+      <div className="flex h-full grow flex-col items-start justify-between p-3">
+        <h3 className="text-foreground line-clamp-2 text-sm font-semibold group-hover:text-white">
+          {item.name}
+        </h3>
+        <p className="mt-2 text-sm text-white/60">@{item.username}</p>
       </div>
     </Link>
   );

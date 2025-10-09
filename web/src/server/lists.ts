@@ -1,4 +1,5 @@
 import type { List, PopularList } from '@/types/lists';
+
 import { HttpError, toHttpError, unwrapData } from '@/lib/http-error';
 
 import { client } from './client-instance';
@@ -85,7 +86,10 @@ export async function getLists(): Promise<List[]> {
 /**
  * Update list metadata (name).
  */
-export async function updateList(listId: number, updates: ListUpdates): Promise<List> {
+export async function updateList(
+  listId: number,
+  updates: ListUpdates,
+): Promise<List> {
   if (!Number.isFinite(listId) || listId <= 0) {
     throw new HttpError(`Invalid listId: ${listId}`);
   }
@@ -95,7 +99,9 @@ export async function updateList(listId: number, updates: ListUpdates): Promise<
   }
 
   try {
-    const { data, error } = await listsRoute({ listId }).patch({ listName: name });
+    const { data, error } = await listsRoute({ listId }).patch({
+      listName: name,
+    });
     if (error) throw toHttpError(error, 'Unable to update list');
     return unwrapData<List>(data);
   } catch (err) {
@@ -124,8 +130,12 @@ export async function deleteList(listId: number): Promise<List> {
 /**
  * Get a public list by username and slug.
  */
-export async function getListData(username: string, slug: string): Promise<ListPageData> {
-  const validUser = typeof username === 'string' && /^[a-zA-Z0-9_-]{3,32}$/.test(username);
+export async function getListData(
+  username: string,
+  slug: string,
+): Promise<ListPageData> {
+  const validUser =
+    typeof username === 'string' && /^[a-zA-Z0-9_-]{3,32}$/.test(username);
   const validSlug = typeof slug === 'string' && slug.trim().length > 0;
   if (!validUser) throw new HttpError(`Invalid username: ${username}`);
   if (!validSlug) throw new HttpError(`Invalid slug: ${slug}`);
@@ -146,7 +156,9 @@ export async function getListData(username: string, slug: string): Promise<ListP
 /**
  * Add an item to a list.
  */
-export async function addListItem(data: InsertListItem): Promise<AddListItemResult> {
+export async function addListItem(
+  data: InsertListItem,
+): Promise<AddListItemResult> {
   const { listId, mediaType, mediaId } = data || ({} as InsertListItem);
   if (!Number.isFinite(listId) || listId <= 0) {
     throw new HttpError(`Invalid listId: ${listId}`);
@@ -159,7 +171,11 @@ export async function addListItem(data: InsertListItem): Promise<AddListItemResu
   }
 
   try {
-    const { data: listItems, error } = await listItemsRoute.post({ listId, mediaType, mediaId });
+    const { data: listItems, error } = await listItemsRoute.post({
+      listId,
+      mediaType,
+      mediaId,
+    });
     if (error) throw toHttpError(error, 'Unable to add list item');
     return unwrapData<AddListItemResult>(listItems);
   } catch (err) {
@@ -183,7 +199,9 @@ export async function getListItem(
   }
 
   try {
-    const { data, error } = await listItemsRoute.get({ query: { mediaType, mediaId } });
+    const { data, error } = await listItemsRoute.get({
+      query: { mediaType, mediaId },
+    });
     if (error) throw toHttpError(error, 'Unable to load list item');
     return unwrapData<SavedListItem>(data);
   } catch (err) {
@@ -220,5 +238,24 @@ export async function getPopularLists(limit = 10): Promise<PopularList[]> {
   } catch (err) {
     if (err instanceof HttpError) throw err;
     throw toHttpError(err, 'Failed to load popular lists');
+  }
+}
+
+/**
+ * Fetch lists for a specific username.
+ */
+export async function getUserLists(username: string): Promise<PopularList[]> {
+  if (typeof username !== 'string' || username.trim().length === 0) {
+    throw new HttpError('Username is required');
+  }
+
+  try {
+    const { data, error } = await client.api.v1.user({ username }).lists.get();
+    if (error) throw toHttpError(error, 'Unable to load user lists');
+    const lists = unwrapData<List[]>(data);
+    return lists.map((l) => ({ ...l, username, viewCount: 0 }));
+  } catch (err) {
+    if (err instanceof HttpError) throw err;
+    throw toHttpError(err, 'Failed to load user lists');
   }
 }
