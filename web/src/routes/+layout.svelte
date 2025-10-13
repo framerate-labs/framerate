@@ -7,11 +7,17 @@
 
 	import favicon from '$lib/assets/favicon.svg';
 	import { authClient } from '$lib/auth-client';
+	import { Toaster } from '$lib/components/ui/sonner/index.js';
 
 	import '../app.css';
 
 	setupConvex(PUBLIC_CONVEX_URL);
 	createSvelteAuthClient({ authClient });
+
+	const pathname = $derived(page.url.pathname);
+	const basePaddingClass = $derived(
+		pathname.includes('film') || pathname.includes('series') ? 'py-0' : 'px-2 py-4'
+	);
 
 	let { children } = $props();
 </script>
@@ -25,16 +31,18 @@
 	/>
 </svelte:head>
 
+<Toaster />
+
 <div
 	class={[
-		page.url.pathname === '/' ? 'bg-background-landing' : 'bg-background',
-		page.url.pathname.includes('film') || page.url.pathname.includes('series')
-			? 'py-0'
-			: 'px-2 py-4',
-		'min-h-full font-manrope antialiased md:px-6'
+		pathname === '/' ? 'bg-background-landing' : 'bg-background',
+		basePaddingClass,
+		'flex min-h-screen flex-col font-manrope antialiased md:px-6 md:py-0'
 	]}
 >
-	<div class="mx-auto size-full max-w-md md:max-w-2xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-[1200px]">
+	<div
+		class="relative mx-auto flex w-full max-w-md flex-1 flex-col md:max-w-2xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-[1200px]"
+	>
 		{@render children?.()}
 	</div>
 </div>

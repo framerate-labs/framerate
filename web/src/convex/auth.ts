@@ -1,13 +1,13 @@
 import type { GenericCtx } from '@convex-dev/better-auth';
-import type { DataModel } from './_generated/dataModel.d.ts';
+import type { DataModel } from './_generated/dataModel.js';
 
 import { createClient } from '@convex-dev/better-auth';
 import { convex } from '@convex-dev/better-auth/plugins';
 import { betterAuth } from 'better-auth';
 import { bearer, jwt, username } from 'better-auth/plugins';
 
-import { components } from './_generated/api';
-import { query } from './_generated/server';
+import { components } from './_generated/api.js';
+import { query } from './_generated/server.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const cookieDomain = isProduction ? '.frame-rate.io' : undefined;
