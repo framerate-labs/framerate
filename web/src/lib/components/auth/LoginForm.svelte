@@ -1,24 +1,35 @@
 <script lang="ts">
-	import type { LoginSchema } from '$schemas/authSchema';
-	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-
 	import { CircleArrowRight, Eye, EyeOff } from '@lucide/svelte';
+	import { loginSchema } from '$schema/authSchema';
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
+	import z4 from 'zod/v4';
+
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
 	import * as Form from '$components/ui/form/index.js';
 	import { Input } from '$components/ui/input/index.js';
 	import { authClient } from '$lib/auth-client';
-	import { loginSchema } from '$schemas/authSchema';
 
-	let { data }: { data: { form: SuperValidated<Infer<LoginSchema>> } } = $props();
+	const form = superForm(
+		{ email: '', password: '' },
+		{
+			validators: zod4Client(loginSchema),
+			onSubmit: ({ formData }) => {
+				const parsed = loginSchema.safeParse(Object.fromEntries(formData));
+				if (!parsed.success) {
+					toast.error(parsed.error.message);
+					return false;
+				}
+				return handleSubmit(parsed.data);
+			},
+			resetForm: false
+		}
+	);
 
-	const form = superForm(data.form, {
-		validators: zod4Client(loginSchema)
-	});
-
-	const { form: formData, enhance, validate } = form;
+	const { form: formData, enhance, errors, validate } = form;
 
 	let isEmailValidated = $state(false);
 	let isVisible = $state(false);
@@ -40,40 +51,43 @@
 	// 	}
 	// });
 
-	// async function handleSubmit(values: z.infer<typeof loginSchema>) {
-	// 	await authClient.signIn.email(
-	// 		{
-	// 			email: values.email,
-	// 			password: values.password
-	// 		},
-	// 		{
-	// 			onRequest: () => {
-	// 				toast.loading('Signing in...', { id: 'sign in' });
-	// 			},
-	// 			onSuccess: () => {
-	// 				toast.dismiss('sign in');
-	// 				toast.success('Signed in');
-	// 				navigate({ to: '/home' });
-	// 			},
-	// 			onError: (ctx) => {
-	// 				toast.dismiss('sign in');
-	// 				const errorCode = ctx.error.code;
-	// 				const errorMessage = ctx.error.message;
+	async function handleSubmit(formData: z4.infer<typeof loginSchema>) {
+		const { email, password } = formData;
 
-	// 				switch (errorCode) {
-	// 					case 'INVALID_EMAIL_OR_PASSWORD':
-	// 						toast.error('Invalid email or password');
-	// 						break;
-	// 					default:
-	// 						toast.error(`An error occurred! ${errorMessage}`, {
-	// 							duration: 6000
-	// 						});
-	// 						console.error(ctx.error);
-	// 				}
-	// 			}
-	// 		}
-	// 	);
-	// }
+		await authClient.signIn.email(
+			{
+				email,
+				password
+			},
+			{
+				onRequest: () => {
+					toast.loading('Signing in...', { id: 'sign in' });
+					console.log('running');
+				},
+				onSuccess: () => {
+					toast.dismiss('sign in');
+					toast.success('Signed in');
+					goto(resolve('/home'));
+				},
+				onError: (ctx) => {
+					toast.dismiss('sign in');
+					const errorCode = ctx.error.code;
+					const errorMessage = ctx.error.message;
+
+					switch (errorCode) {
+						case 'INVALID_EMAIL_OR_PASSWORD':
+							toast.error('Invalid email or password');
+							break;
+						default:
+							toast.error(`An error occurred! ${errorMessage}`, {
+								duration: 6000
+							});
+							console.error(ctx.error);
+					}
+				}
+			}
+		);
+	}
 </script>
 
 <form method="POST" use:enhance>
@@ -82,7 +96,10 @@
 			{#snippet children({ props })}
 				<Form.Label class="sr-only">Email</Form.Label>
 				<div
-					class={['relative flex items-center rounded-full bg-white/[0.01] ring-1 ring-white/10']}
+					class={[
+						'relative flex items-center rounded-full bg-white/[0.01] ring-1 ring-white/10',
+						$errors.email && '!ring-red-500'
+					]}
 				>
 					<Input
 						{...props}
@@ -90,7 +107,7 @@
 						type="email"
 						placeholder="account email"
 						autocomplete="email"
-						class="auth-input rounded-l-full rounded-r-none bg-transparent ring-0 ring-transparent"
+						class="auth-input grow rounded-l-full rounded-r-none bg-transparent ring-0 ring-transparent"
 					/>
 					<button
 						type="button"
@@ -117,7 +134,10 @@
 				{#snippet children({ props })}
 					<Form.Label class="sr-only">Password</Form.Label>
 					<div
-						class={['relative flex items-center rounded-full bg-white/[0.01] ring-1 ring-white/10']}
+						class={[
+							'relative flex items-center rounded-full bg-white/[0.01] ring-1 ring-white/10',
+							$errors.password && 'ring-1 !ring-red-500'
+						]}
 					>
 						<Input
 							{...props}
@@ -149,6 +169,7 @@
 
 		<Form.Button
 			type="submit"
+			disabled={$errors.email !== undefined || $errors.password !== undefined}
 			class="absolute mt-6 w-full cursor-pointer rounded-full bg-transparent py-1.5 font-semibold text-foreground ring-1 ring-white/10 transition-colors duration-150 hover:bg-white/10"
 		>
 			Login

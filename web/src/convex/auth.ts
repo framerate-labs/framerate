@@ -9,6 +9,8 @@ import { bearer, jwt, username } from 'better-auth/plugins';
 import { components } from './_generated/api.js';
 import { query } from './_generated/server.js';
 
+const siteUrl = process.env.SITE_URL!;
+
 const isProduction = process.env.NODE_ENV === 'production';
 const cookieDomain = isProduction ? '.frame-rate.io' : undefined;
 
@@ -26,7 +28,7 @@ export const createAuth = (
 		logger: {
 			disabled: optionsOnly
 		},
-		// baseURL: siteUrl,
+		baseURL: siteUrl,
 		database: authComponent.adapter(ctx),
 		emailAndPassword: {
 			enabled: true,
@@ -70,10 +72,31 @@ export const createAuth = (
 	});
 };
 
-// Example fn
-export const getCurrentUser = query({
+// const signupObj = v.object({
+// 	email: v.string(),
+// 	name: v.string(),
+// 	username: v.string(),
+// 	password: v.string()
+// });
+
+// export const signup = mutation({
+// 	args: { user: signupObj },
+// 	handler: async (ctx, { user }) => {
+// 		const parsed = signupSchema.safeParse(user);
+
+// 		if (parsed.success) {
+// 			const { auth } = await authComponent.getAuth(createAuth, ctx);
+// 			await auth.api.signUpEmail({ body: user });
+// 		}
+
+// 		// Implement failure path
+// 		return;
+// 	}
+// });
+
+export const getSafeCurrentUser = query({
 	args: {},
 	handler: async (ctx) => {
-		return authComponent.getAuthUser(ctx);
+		return authComponent.safeGetAuthUser(ctx);
 	}
 });

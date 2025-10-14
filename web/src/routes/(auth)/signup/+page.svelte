@@ -1,12 +1,14 @@
 <script lang="ts">
-	import { X } from '@lucide/svelte';
+	import { CircleArrowLeft, X } from '@lucide/svelte';
 
 	import { resolve } from '$app/paths';
 
 	import AuthContent from '$components/auth/AuthContent.svelte';
 	import AuthFooter from '$components/auth/AuthFooter.svelte';
-	import LoginForm from '$components/auth/LoginForm.svelte';
+	import RotatingQuotes from '$components/auth/RotatingQuotes.svelte';
+	import SignupForm from '$components/auth/SignupForm.svelte';
 
+	let page = $state(1);
 	let reduceMotion = $state(false);
 
 	$effect(() => {
@@ -17,12 +19,16 @@
 
 		return () => mq.removeEventListener?.('change', handler);
 	});
+
+	function handleClick() {
+		page = 1;
+	}
 </script>
 
 {#if !reduceMotion}
 	<div
 		aria-hidden={true}
-		class="login-animated-mesh absolute top-24 right-0 bottom-0 left-0 m-auto h-1/2 w-1/2"
+		class="signup-animated-mesh absolute top-24 right-0 bottom-0 left-0 m-auto h-1/2 w-1/2"
 	></div>
 {/if}
 
@@ -40,16 +46,31 @@
 		<X size={18} />
 	</a>
 
+	<div class={`mb-24 h-12 ${page === 2 ? 'block' : 'hidden'}`}>
+		<RotatingQuotes />
+	</div>
+
 	<div class="relative animate-fade-in">
-		<AuthContent
-			title="Login to FrameRate"
-			description="If you have access to FrameRate, you can enter your email below."
-		/>
+		{#if page === 1}
+			<AuthContent
+				title="Welcome to FrameRate"
+				description="Thank you for being an early adopter. Let's set up your account."
+			/>
+		{/if}
 
 		<section>
-			<LoginForm />
+			{#if page === 2}
+				<button
+					type="button"
+					onclick={handleClick}
+					class="mb-4 w-fit text-gray transition-colors duration-200 hover:text-foreground"
+				>
+					<CircleArrowLeft size={32} strokeWidth={1.1} />
+				</button>
+			{/if}
+			<SignupForm {page} />
 		</section>
 	</div>
 </main>
 
-<AuthFooter text="Don't have an account yet?" linkText="Sign up" linkTo="/signup" />
+<AuthFooter text="Already have an account?" linkText="Login" linkTo="/login" />

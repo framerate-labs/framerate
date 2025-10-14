@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	type Props = {
 		text: string;
 		linkText: string;
-		linkTo: string;
+		linkTo: '/login' | '/signup';
 	};
 
 	let { text, linkText, linkTo }: Props = $props();
@@ -12,7 +14,7 @@
 	<div class="gradient-border h-[1px] w-full"></div>
 	<p class="mt-6">
 		{text}
-		<a href={linkTo} class="text-foreground"> {linkText} </a>
+		<a href={resolve(linkTo)} class="cursor-pointer text-foreground">{linkText}</a>
 		.
 	</p>
 </footer>
