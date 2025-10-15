@@ -2,6 +2,7 @@
 	import type { Trending } from '$schema/trending';
 
 	import { slugify } from '$utils/strings';
+
 	import { resolve } from '$app/paths';
 
 	import Poster from '$components/shared/poster.svelte';
@@ -18,13 +19,13 @@
 		{
 			type: 'movie' as const,
 			title: 'Movies Making Waves',
-			link: '/films/$id/$title',
+			link: '/films/[id]/[slug]' as const,
 			data: trendingMovies
 		},
 		{
 			type: 'tv' as const,
 			title: 'Series Sensations',
-			link: '/series/$id/$title',
+			link: '/series/[id]/[slug]' as const,
 			data: trendingTv
 		}
 	]);
@@ -50,7 +51,16 @@
 						{@const fetchStrategy = index < 7 ? 'high' : 'low'}
 
 						<Carousel.Item class="basis-auto">
-							<a href={resolve(group.link, { id: String(media.id), title: titleSlug })}>
+							<a
+								href={resolve(
+									//@ts-expect-error Union type issue with resolve
+									group.link,
+									{
+										id: String(media.id),
+										slug: titleSlug
+									}
+								)}
+							>
 								<Poster
 									title={media.title}
 									src={media.posterPath}

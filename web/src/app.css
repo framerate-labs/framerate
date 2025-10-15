@@ -26,7 +26,7 @@
 
 @theme {
 	/* Animations */
-	--animate-fade-in: fade-in 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
+	--animate-fade-in: fade-in 0.15s cubic-bezier(0.39, 0.575, 0.565, 1);
 	--animate-scale-to-right: scale-to-right 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
 
