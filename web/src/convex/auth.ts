@@ -11,9 +11,6 @@ import { query } from './_generated/server.js';
 
 const siteUrl = process.env.SITE_URL!;
 
-const isProduction = process.env.NODE_ENV === 'production';
-const cookieDomain = isProduction ? '.frame-rate.io' : undefined;
-
 // The component client has methods needed for integrating Convex with Better Auth,
 // as well as helper methods for general use.
 export const authComponent = createClient<DataModel>(components.betterAuth);
@@ -50,49 +47,17 @@ export const createAuth = (
 			max: 10
 		},
 		advanced: {
-			cookiePrefix: 'framerate',
-			useSecureCookies: isProduction,
-			defaultCookieAttributes: {
-				// Only set domain in production so cookies set on API are valid for subdomains
-				// and avoid localhost issues during development.
-				domain: cookieDomain,
-				httpOnly: true,
-				partitioned: isProduction,
-				path: '/',
-				sameSite: isProduction ? 'None' : 'Lax'
-			}
+			cookiePrefix: 'framerate'
 		},
 		plugins: [
 			// The Convex plugin is required for Convex compatibility
 			bearer(),
-			convex(),
 			jwt(),
-			username({ minUsernameLength: 1, maxUsernameLength: 20 })
+			username({ minUsernameLength: 1, maxUsernameLength: 20 }),
+			convex()
 		]
 	});
 };
-
-// const signupObj = v.object({
-// 	email: v.string(),
-// 	name: v.string(),
-// 	username: v.string(),
-// 	password: v.string()
-// });
-
-// export const signup = mutation({
-// 	args: { user: signupObj },
-// 	handler: async (ctx, { user }) => {
-// 		const parsed = signupSchema.safeParse(user);
-
-// 		if (parsed.success) {
-// 			const { auth } = await authComponent.getAuth(createAuth, ctx);
-// 			await auth.api.signUpEmail({ body: user });
-// 		}
-
-// 		// Implement failure path
-// 		return;
-// 	}
-// });
 
 export const getSafeCurrentUser = query({
 	args: {},

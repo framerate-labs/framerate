@@ -1,6 +1,7 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
+
 	import { CircleArrowRight, Eye, EyeOff } from '@lucide/svelte';
-	import { loginSchema } from '$schema/authSchema';
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
@@ -12,18 +13,19 @@
 	import * as Form from '$components/ui/form/index.js';
 	import { Input } from '$components/ui/input/index.js';
 	import { authClient } from '$lib/auth-client';
+	import { loginSchema } from '$schema/authSchema';
 
 	const form = superForm(
 		{ email: '', password: '' },
 		{
 			validators: zod4Client(loginSchema),
 			onSubmit: ({ formData }) => {
-				const parsed = loginSchema.safeParse(Object.fromEntries(formData));
-				if (!parsed.success) {
-					toast.error(parsed.error.message);
-					return false;
+				const data = Object.fromEntries(formData) as z4.infer<typeof loginSchema>;
+				if (!data.email || !data.password) {
+					toast.error('Please fill all fields correctly.');
+					return;
 				}
-				return handleSubmit(parsed.data);
+				return handleSubmit(data);
 			},
 			resetForm: false
 		}
@@ -43,14 +45,6 @@
 		}
 	}
 
-	// Improves keyboard navigation by focusing relevant input
-	// after email validation
-	// $effect(() => {
-	// 	if (isEmailValidated) {
-	// 		form.enhance('password');
-	// 	}
-	// });
-
 	async function handleSubmit(formData: z4.infer<typeof loginSchema>) {
 		const { email, password } = formData;
 
@@ -62,7 +56,6 @@
 			{
 				onRequest: () => {
 					toast.loading('Signing in...', { id: 'sign in' });
-					console.log('running');
 				},
 				onSuccess: () => {
 					toast.dismiss('sign in');
@@ -164,7 +157,7 @@
 			<Form.Description class="sr-only"
 				>This is the email you used to create your account.</Form.Description
 			>
-			<Form.FieldErrors class="mt-1 ml-6 max-w-full font-medium text-wrap text-red-500" />
+			<Form.FieldErrors class="mt-1 ml-6 max-w-80 font-medium text-wrap text-red-500" />
 		</Form.Field>
 
 		<Form.Button

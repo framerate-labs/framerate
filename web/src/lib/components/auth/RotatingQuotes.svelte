@@ -27,8 +27,6 @@
 	});
 </script>
 
-return (
 <span class="block text-center text-[26px] font-medium">
 	{quotes[currentIndex]}
 </span>
-); }

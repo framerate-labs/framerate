@@ -8,7 +8,7 @@
 	import RotatingQuotes from '$components/auth/RotatingQuotes.svelte';
 	import SignupForm from '$components/auth/SignupForm.svelte';
 
-	let page = $state(1);
+	let pageState = $state({ page: 1 });
 	let reduceMotion = $state(false);
 
 	$effect(() => {
@@ -21,7 +21,7 @@
 	});
 
 	function handleClick() {
-		page = 1;
+		pageState.page = 1;
 	}
 </script>
 
@@ -37,7 +37,7 @@
 	class="pointer-events-none fixed inset-0 z-0 bg-black/70 backdrop-blur-3xl"
 ></div>
 
-<main class="relative flex w-full flex-1 items-center justify-center">
+<main class="relative flex w-full flex-1 flex-col items-center justify-center">
 	<a
 		href={resolve('/')}
 		aria-label="Close and go to home"
@@ -46,12 +46,12 @@
 		<X size={18} />
 	</a>
 
-	<div class={`mb-24 h-12 ${page === 2 ? 'block' : 'hidden'}`}>
+	<div class={`mb-3 h-12 ${pageState.page === 2 ? 'block' : 'hidden'}`}>
 		<RotatingQuotes />
 	</div>
 
 	<div class="relative animate-fade-in">
-		{#if page === 1}
+		{#if pageState.page === 1}
 			<AuthContent
 				title="Welcome to FrameRate"
 				description="Thank you for being an early adopter. Let's set up your account."
@@ -59,16 +59,16 @@
 		{/if}
 
 		<section>
-			{#if page === 2}
+			{#if pageState.page === 2}
 				<button
 					type="button"
 					onclick={handleClick}
-					class="mb-4 w-fit text-gray transition-colors duration-200 hover:text-foreground"
+					class="mb-7 w-fit text-gray transition-colors duration-200 hover:text-foreground"
 				>
 					<CircleArrowLeft size={32} strokeWidth={1.1} />
 				</button>
 			{/if}
-			<SignupForm {page} />
+			<SignupForm {pageState} />
 		</section>
 	</div>
 </main>
