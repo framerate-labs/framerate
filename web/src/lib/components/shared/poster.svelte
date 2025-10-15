@@ -27,7 +27,8 @@
 
 	let imageLoaded = $state(false);
 	let boundingRef: DOMRect | null;
-	let imageRef: HTMLImageElement;
+	// svelte-ignore non_reactive_update
+	let imageRef: HTMLImageElement | null;
 
 	let perspectiveClasses = $derived(
 		perspectiveEnabled
