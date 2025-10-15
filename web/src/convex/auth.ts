@@ -38,7 +38,7 @@ export const createAuth = (
 			updateAge: 86400, // 1 day
 			cookieCache: {
 				enabled: true,
-				maxAge: 20 * 60 // 20 minutes
+				maxAge: 10 * 60 // 10 minutes
 			}
 		},
 		rateLimit: {
@@ -53,9 +53,12 @@ export const createAuth = (
 	});
 };
 
-export const getSafeCurrentUser = query({
+export const getAuthSession = query({
 	args: {},
 	handler: async (ctx) => {
-		return authComponent.safeGetAuthUser(ctx);
+		const { auth, headers } = await authComponent.getAuth(createAuth, ctx);
+
+		const data = await auth.api.getSession({ headers });
+		return data;
 	}
 });

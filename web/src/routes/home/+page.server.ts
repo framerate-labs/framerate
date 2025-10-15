@@ -1,18 +1,19 @@
 import type { PageServerLoad } from './$types';
 
-import { createConvexHttpClient } from '@mmailaender/convex-better-auth-svelte/sveltekit';
+import { createAuth } from '$convex/auth';
 
-import { api } from '$convex/_generated/api';
+export const load: PageServerLoad = async ({ request, locals }) => {
+	// Direct call to BetterAuth to ensure we hit cookie cache on subsequent requests.
+	// Convex's HTTP Client drops cookies before calling BetterAuth's methods.
+	// We don't need the ctx object for createAuth(), so an explicit any is used.
+	// eslint-disable-next-line
+	const auth = createAuth({} as any, { optionsOnly: true });
+	const session = await auth.api.getSession({
+		headers: request.headers
+	});
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const client = createConvexHttpClient({ token: locals.token });
-
-	// Fetch user data on server
-	const user = await client.query(api.auth.getSafeCurrentUser, {});
-
-	// Pass token to universal load function
 	return {
-		user,
+		user: session?.user ?? null,
 		token: locals.token
 	};
 };
