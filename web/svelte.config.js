@@ -18,9 +18,10 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
-			$convex: './src/lib/convex',
+			$convex: './src/convex',
 			$components: './src/lib/components',
 			$schema: './src/lib/schema',
+			$stores: './src/lib/stores',
 			$utils: './src/lib/utils'
 		},
 		experimental: {

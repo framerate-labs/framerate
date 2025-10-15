@@ -4,7 +4,7 @@ import { getToken } from '@mmailaender/convex-better-auth-svelte/sveltekit';
 
 import { SITE_URL } from '$env/static/private';
 
-import { createAuth } from './convex/auth.js';
+import { createAuth } from '$convex/auth';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	if (SITE_URL && !process.env.SITE_URL) {
