@@ -2,17 +2,12 @@ import type { PageLoad } from './$types';
 
 import { createConvexHttpClient } from '@mmailaender/convex-better-auth-svelte/sveltekit';
 
-import { getRequestEvent } from '$app/server';
-
 import { api } from '$convex/_generated/api';
 
-export const load: PageLoad = async ({ parent }) => {
-	const { locals } = getRequestEvent();
-
+export const load: PageLoad = async ({ parent, data }) => {
+	const { token } = data;
 	const { queryClient } = await parent();
-	const client = createConvexHttpClient({ token: locals.token });
-
-	const user = await client.query(api.auth.getSafeCurrentUser, {});
+	const client = createConvexHttpClient({ token });
 
 	await Promise.all([
 		queryClient.prefetchQuery({
@@ -26,6 +21,6 @@ export const load: PageLoad = async ({ parent }) => {
 	]);
 
 	return {
-		user
+		...data
 	};
 };

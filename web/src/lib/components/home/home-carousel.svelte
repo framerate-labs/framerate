@@ -49,7 +49,7 @@
 						{@const loadingStrategy = index < 7 ? 'eager' : 'lazy'}
 						{@const fetchStrategy = index < 7 ? 'high' : 'low'}
 
-						<Carousel.Item>
+						<Carousel.Item class="basis-auto">
 							<a href={resolve(group.link, { id: String(media.id), title: titleSlug })}>
 								<Poster
 									title={media.title}
