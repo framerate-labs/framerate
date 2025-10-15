@@ -49,13 +49,7 @@ export const createAuth = (
 		advanced: {
 			cookiePrefix: 'framerate'
 		},
-		plugins: [
-			// The Convex plugin is required for Convex compatibility
-			bearer(),
-			jwt(),
-			username({ minUsernameLength: 1, maxUsernameLength: 20 }),
-			convex()
-		]
+		plugins: [jwt(), bearer(), username({ minUsernameLength: 1, maxUsernameLength: 20 }), convex()]
 	});
 };
 

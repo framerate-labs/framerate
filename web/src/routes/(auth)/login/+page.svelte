@@ -3,9 +3,9 @@
 
 	import { resolve } from '$app/paths';
 
-	import AuthContent from '$components/auth/AuthContent.svelte';
-	import AuthFooter from '$components/auth/AuthFooter.svelte';
-	import LoginForm from '$components/auth/LoginForm.svelte';
+	import AuthContent from '$components/auth/auth-content.svelte';
+	import AuthFooter from '$components/auth/auth-footer.svelte';
+	import LoginForm from '$components/auth/login-form.svelte';
 
 	let reduceMotion = $state(false);
 

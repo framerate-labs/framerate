@@ -1,4 +1,3 @@
-import { signupSchema } from '$schema/authSchema';
 import {
 	collapseDuplicatesTransformer,
 	DataSet,
@@ -12,6 +11,8 @@ import {
 	toAsciiLowerCaseTransformer
 } from 'obscenity';
 import z4 from 'zod/v4';
+
+import { signupSchema } from '$schema/auth-schema';
 
 export function blacklistChecks(unsafeData: z4.infer<typeof signupSchema>) {
 	const { success, data: parsedData, error: parsedError } = signupSchema.safeParse(unsafeData);

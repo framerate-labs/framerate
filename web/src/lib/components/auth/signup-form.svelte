@@ -12,7 +12,7 @@
 	import { Input } from '$components/ui/input/index.js';
 	import { authClient } from '$lib/auth-client';
 	import { blacklistChecks } from '$lib/utils/blacklist-check';
-	import { signupSchema } from '$schema/authSchema';
+	import { signupSchema } from '$schema/auth-schema';
 
 	type Props = {
 		pageState: { page: number };
@@ -92,7 +92,7 @@
 							// 	await createList('Watchlist');
 							// }
 
-							goto(resolve('/home'));
+							await goto(resolve('/home'));
 						},
 						onError: (ctx) => {
 							toast.dismiss('signup');

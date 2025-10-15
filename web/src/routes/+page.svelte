@@ -1,23 +1,25 @@
 <script lang="ts">
 	import { Fingerprint, Ticket } from '@lucide/svelte';
+
+	import { resolve } from '$app/paths';
 </script>
 
 <div class="relative min-h-screen">
 	<header>
-		<nav class="flex items-center justify-between md:pt-8">
-			<a href="/">
+		<nav class="flex items-center justify-between md:pt-12">
+			<a href={resolve('/')}>
 				<h1 class="text-lg font-extrabold md:text-3xl">FrameRate</h1>
 			</a>
 
 			<div class="flex items-center gap-4 text-sm font-semibold md:gap-10 md:text-base">
-				<a href="/login" class="group/login flex items-center gap-1.5 md:gap-2">
+				<a href={resolve('/login')} class="group/login flex items-center gap-1.5 md:gap-2">
 					<span class="text-gray transition-colors duration-200 group-hover/login:text-foreground">
 						<Fingerprint size={18} />
 					</span>
 					Login
 				</a>
 
-				<a href="/signup" class="group/signup peer flex items-center gap-1.5 md:gap-2">
+				<a href={resolve('/signup')} class="group/signup peer flex items-center gap-1.5 md:gap-2">
 					<span class="text-gray transition-colors duration-200 group-hover/signup:text-foreground">
 						<Ticket size={18} />
 					</span>
@@ -60,7 +62,7 @@
 				</div>
 
 				<!-- CTA -->
-				<a href="/signup" class="inline-block">
+				<a href={resolve('/signup')} class="inline-block">
 					<div
 						class="rounded-full border border-indigo-700 bg-indigo-800/20 px-14 py-2 shadow-md inset-shadow-xs inset-shadow-indigo-600 transition-colors duration-150 ease-in-out hover:bg-indigo-700"
 					>

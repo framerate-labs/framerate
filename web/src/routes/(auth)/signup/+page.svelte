@@ -3,10 +3,10 @@
 
 	import { resolve } from '$app/paths';
 
-	import AuthContent from '$components/auth/AuthContent.svelte';
-	import AuthFooter from '$components/auth/AuthFooter.svelte';
-	import RotatingQuotes from '$components/auth/RotatingQuotes.svelte';
-	import SignupForm from '$components/auth/SignupForm.svelte';
+	import AuthContent from '$components/auth/auth-content.svelte';
+	import AuthFooter from '$components/auth/auth-footer.svelte';
+	import RotatingQuotes from '$components/auth/rotating-quotes.svelte';
+	import SignupForm from '$components/auth/signup-form.svelte';
 
 	let pageState = $state({ page: 1 });
 	let reduceMotion = $state(false);

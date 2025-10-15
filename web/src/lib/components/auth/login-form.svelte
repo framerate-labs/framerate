@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { Component } from 'svelte';
-
 	import { CircleArrowRight, Eye, EyeOff } from '@lucide/svelte';
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
@@ -13,7 +11,7 @@
 	import * as Form from '$components/ui/form/index.js';
 	import { Input } from '$components/ui/input/index.js';
 	import { authClient } from '$lib/auth-client';
-	import { loginSchema } from '$schema/authSchema';
+	import { loginSchema } from '$schema/auth-schema';
 
 	const form = superForm(
 		{ email: '', password: '' },
@@ -57,10 +55,10 @@
 				onRequest: () => {
 					toast.loading('Signing in...', { id: 'sign in' });
 				},
-				onSuccess: () => {
+				onSuccess: async () => {
 					toast.dismiss('sign in');
 					toast.success('Signed in');
-					goto(resolve('/home'));
+					await goto(resolve('/home'));
 				},
 				onError: (ctx) => {
 					toast.dismiss('sign in');

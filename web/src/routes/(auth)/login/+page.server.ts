@@ -4,7 +4,7 @@ import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
-import { loginSchema } from '$schema/authSchema.js';
+import { loginSchema } from '$schema/auth-schema';
 
 export const load: PageServerLoad = async () => {
 	return {
