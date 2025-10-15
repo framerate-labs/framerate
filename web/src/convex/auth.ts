@@ -9,7 +9,7 @@ import { bearer, jwt, username } from 'better-auth/plugins';
 import { components } from './_generated/api.js';
 import { query } from './_generated/server.js';
 
-const siteUrl = process.env.SITE_URL!;
+const siteUrl = process.env.PUBLIC_SITE_URL!;
 
 // The component client has methods needed for integrating Convex with Better Auth,
 // as well as helper methods for general use.
