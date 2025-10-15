@@ -1,8 +1,7 @@
 <script lang="ts">
-	// import type { Trending } from '@/types/trending';
+	import type { Trending } from '$schema/trending';
 
 	import { slugify } from '$utils/strings';
-
 	import { resolve } from '$app/paths';
 
 	import Poster from '$components/shared/poster.svelte';
@@ -15,23 +14,20 @@
 
 	let { trendingMovies, trendingTv }: Props = $props();
 
-	let movieData = $state(trendingMovies);
-	let tvData = $state(trendingTv);
-
-	const groupedData = [
+	const groupedData = $derived([
 		{
-			type: 'movie',
+			type: 'movie' as const,
 			title: 'Movies Making Waves',
 			link: '/films/$id/$title',
-			data: movieData
+			data: trendingMovies
 		},
 		{
-			type: 'tv',
+			type: 'tv' as const,
 			title: 'Series Sensations',
 			link: '/series/$id/$title',
-			data: tvData
+			data: trendingTv
 		}
-	];
+	]);
 </script>
 
 <div class="animate-fade-in">

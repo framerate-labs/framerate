@@ -51,6 +51,7 @@
 		"@ianvs/prettier-plugin-sort-imports": "^4.7.0",
 		"@lucide/svelte": "^0.544.0",
 		"@mmailaender/convex-better-auth-svelte": "^0.2.0",
+		"@tanstack/svelte-query": "^6.0.1",
 		"@vercel/blob": "^2.0.0",
 		"better-auth": "^1.3.27",
 		"convex": "^1.27.5",

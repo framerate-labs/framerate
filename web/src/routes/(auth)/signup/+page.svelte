@@ -37,7 +37,7 @@
 	class="pointer-events-none fixed inset-0 z-0 bg-black/70 backdrop-blur-3xl"
 ></div>
 
-<main class="relative flex w-full flex-1 flex-col items-center justify-center">
+<div class="relative flex w-full flex-1 flex-col items-center justify-center">
 	<a
 		href={resolve('/')}
 		aria-label="Close and go to home"
@@ -71,6 +71,6 @@
 			<SignupForm {pageState} />
 		</section>
 	</div>
-</main>
+</div>
 
 <AuthFooter text="Already have an account?" linkText="Login" linkTo="/login" />

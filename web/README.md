@@ -2,6 +2,14 @@
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
+## TMDB Configuration
+
+Set a TMDB API bearer token so Convex can proxy trending requests without exposing secrets:
+
+```sh
+npx convex env set TMDB_TOKEN "<your-token>"
+```
+
 ## Creating a project
 
 If you're seeing this, you've probably already done this step. Congrats!

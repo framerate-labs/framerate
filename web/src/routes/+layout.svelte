@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createSvelteAuthClient } from '@mmailaender/convex-better-auth-svelte/svelte';
+	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { setupConvex } from 'convex-svelte';
 
 	import { page } from '$app/state';
@@ -19,7 +20,7 @@
 		pathname.includes('film') || pathname.includes('series') ? 'py-0' : 'px-2 py-4'
 	);
 
-	let { children } = $props();
+	let { data, children } = $props();
 </script>
 
 <svelte:head>
@@ -33,16 +34,18 @@
 
 <Toaster />
 
-<div
-	class={[
-		pathname === '/' ? 'bg-background-landing' : 'bg-background',
-		basePaddingClass,
-		'flex min-h-screen flex-col font-manrope antialiased md:px-6 md:py-0'
-	]}
->
+<QueryClientProvider client={data.queryClient}>
 	<div
-		class="relative mx-auto flex w-full max-w-md flex-1 flex-col md:max-w-2xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-[1200px]"
+		class={[
+			pathname === '/' ? 'bg-background-landing' : 'bg-background',
+			basePaddingClass,
+			'flex min-h-screen flex-col font-manrope antialiased md:px-6 md:py-0'
+		]}
 	>
-		{@render children?.()}
+		<main
+			class="relative mx-auto flex w-full max-w-md flex-1 flex-col md:max-w-2xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-[1200px]"
+		>
+			{@render children?.()}
+		</main>
 	</div>
-</div>
+</QueryClientProvider>

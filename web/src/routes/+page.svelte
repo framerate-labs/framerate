@@ -29,7 +29,7 @@
 		</nav>
 	</header>
 
-	<main class="mx-auto">
+	<div class="mx-auto">
 		<!-- Image -->
 		<section class="relative mx-auto w-full">
 			<div class="mx-auto mt-10 w-[95%] md:mt-14">
@@ -71,5 +71,5 @@
 				</a>
 			</section>
 		</section>
-	</main>
+	</div>
 </div>
