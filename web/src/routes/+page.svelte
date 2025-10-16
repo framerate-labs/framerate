@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Fingerprint, Ticket } from '@lucide/svelte';
+	import Fingerprint from '@lucide/svelte/icons/fingerprint';
+	import Ticket from '@lucide/svelte/icons/ticket';
 
 	import { resolve } from '$app/paths';
 </script>

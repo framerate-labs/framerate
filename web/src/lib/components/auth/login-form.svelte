@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { CircleArrowRight, Eye, EyeOff } from '@lucide/svelte';
+	import CircleArrowRight from '@lucide/svelte/icons/circle-arrow-right';
+	import Eye from '@lucide/svelte/icons/eye';
+	import EyeOff from '@lucide/svelte/icons/eye-off';
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';

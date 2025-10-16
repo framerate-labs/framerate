@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { CircleArrowLeft, X } from '@lucide/svelte';
+	import CircleArrowLeft from '@lucide/svelte/icons/circle-arrow-left';
+	import X from '@lucide/svelte/icons/x';
 
 	import { resolve } from '$app/paths';
 
