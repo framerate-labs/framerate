@@ -9,6 +9,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { authClient } from '$lib/auth-client';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
+	import { userStore } from '$stores/user-store.svelte';
 
 	import '../app.css';
 
@@ -21,6 +22,19 @@
 	);
 
 	let { data, children } = $props();
+
+	// Set user from server data - runs once on mount and when data.user changes
+	$effect(() => {
+		if (data.user) {
+			userStore.setUser(data.user);
+		} else {
+			userStore.setUser({
+				email: '',
+				name: 'Guest',
+				username: 'guest'
+			});
+		}
+	});
 </script>
 
 <svelte:head>

@@ -22,6 +22,9 @@ function getQueryClient() {
 	return queryClient;
 }
 
-export const load: LayoutLoad = () => {
-	return { queryClient: getQueryClient() };
+export const load: LayoutLoad = async ({ data }) => {
+	return {
+		...data, // Spread server data (includes user)
+		queryClient: getQueryClient()
+	};
 };
