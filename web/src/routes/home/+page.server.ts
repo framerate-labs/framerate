@@ -1,19 +1,23 @@
+import type { User } from '$stores/user-store.svelte';
 import type { PageServerLoad } from './$types';
 
-import { createAuth } from '$convex/auth';
-
-export const load: PageServerLoad = async ({ request, locals }) => {
-	// Direct call to BetterAuth to ensure we hit cookie cache on subsequent requests.
-	// Convex's HTTP Client drops cookies before calling BetterAuth's methods.
-	// We don't need the ctx object for createAuth(), so an explicit any is used.
-	// eslint-disable-next-line
-	const auth = createAuth({} as any, { optionsOnly: true });
-	const session = await auth.api.getSession({
-		headers: request.headers
-	});
+export const load: PageServerLoad = async ({ locals }) => {
+	let user: User | null = null;
+	if (locals.token) {
+		try {
+			const payload = JSON.parse(atob(locals.token.split('.')[1]));
+			user = {
+				email: payload.email,
+				name: payload.name,
+				username: payload.username
+			};
+		} catch (_e) {
+			// Token decode failed, user stays null
+		}
+	}
 
 	return {
-		user: session?.user ?? null,
+		user,
 		token: locals.token
 	};
 };
