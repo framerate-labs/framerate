@@ -1,12 +1,10 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import { browser } from '$app/environment';
 
 	import HomeCarousel from '$components/home/home-carousel.svelte';
 	import Header from '$components/shared/header.svelte';
 	import { useTrending } from '$lib/hooks/use-trending.svelte';
 	import { userStore } from '$stores/user-store.svelte';
-
-	let { data }: { data: PageData } = $props();
 
 	const moviesQuery = useTrending({
 		filter: 'movie',
@@ -18,20 +16,37 @@
 		timeWindow: 'week'
 	});
 
-	$effect(() => {
-		const user = data.user
-			? {
-					email: data.user.email,
-					name: data.user.name,
-					username: data.user.username as string
-				}
-			: {
-					email: '',
-					name: 'Guest',
-					username: 'guest'
-				};
+	function setGuestUser() {
+		userStore.setUser({
+			email: '',
+			name: 'Guest',
+			username: 'guest'
+		});
+	}
 
-		userStore.setUser(user);
+	$effect(() => {
+		if (!browser) return;
+
+		// Decode user from JWT token
+		const cookies = document.cookie.split('; ');
+		const sessionCookie = cookies.find((c) => c.startsWith('framerate.session_token='));
+
+		if (sessionCookie) {
+			try {
+				const token = sessionCookie.split('=')[1];
+				const payload = JSON.parse(atob(token.split('.')[1]));
+				userStore.setUser({
+					email: payload.email,
+					name: payload.name,
+					username: payload.username
+				});
+			} catch (_e) {
+				// Token decode failed, set guest user
+				setGuestUser();
+			}
+		} else {
+			setGuestUser();
+		}
 	});
 </script>
 

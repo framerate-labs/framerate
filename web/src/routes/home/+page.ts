@@ -4,10 +4,11 @@ import { createConvexHttpClient } from '@mmailaender/convex-better-auth-svelte/s
 
 import { api } from '$convex/_generated/api';
 
-export const load: PageLoad = async ({ parent, data }) => {
-	const { token } = data;
+export const load: PageLoad = async ({ parent }) => {
 	const { queryClient } = await parent();
-	const client = createConvexHttpClient({ token });
+
+	// Trending data is public
+	const client = createConvexHttpClient({ token: undefined });
 
 	await Promise.all([
 		queryClient.prefetchQuery({
@@ -19,8 +20,4 @@ export const load: PageLoad = async ({ parent, data }) => {
 			queryFn: () => client.action(api.trending.get, { filter: 'tv', timeWindow: 'week' })
 		})
 	]);
-
-	return {
-		...data
-	};
 };
