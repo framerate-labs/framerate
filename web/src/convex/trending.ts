@@ -1,4 +1,4 @@
-import type { TrendingFilter, TrendingTimeWindow } from '../lib/schema/trending';
+import type { TrendingFilter, TrendingTimeWindow } from '../lib/types/trending';
 
 import { ConvexError, v } from 'convex/values';
 

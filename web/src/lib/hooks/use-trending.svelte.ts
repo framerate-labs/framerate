@@ -1,4 +1,4 @@
-import type { Trending, TrendingFilter, TrendingTimeWindow } from '$lib/schema/trending';
+import type { Trending, TrendingFilter, TrendingTimeWindow } from '$lib/types/trending';
 
 import { createQuery } from '@tanstack/svelte-query';
 import { useConvexClient } from 'convex-svelte';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Trending } from '$schema/trending';
+	import type { Trending } from '$lib/types/trending';
 
 	import { slugify } from '$utils/strings';
 

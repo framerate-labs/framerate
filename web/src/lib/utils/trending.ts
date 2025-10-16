@@ -1,9 +1,4 @@
-import type {
-	TrendingApiItem,
-	TrendingMovie,
-	TrendingPerson,
-	TrendingTV
-} from '../schema/trending';
+import type { TrendingApiItem, TrendingMovie, TrendingPerson, TrendingTV } from '../types/trending';
 
 /**
  * Normalizes an array of trending items from TMDB API format to client format.

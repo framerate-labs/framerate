@@ -9,7 +9,10 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as details from "../details.js";
 import type * as http from "../http.js";
+import type * as lists from "../lists.js";
+import type * as reviews from "../reviews.js";
 import type * as trending from "../trending.js";
 
 import type {
@@ -28,7 +31,10 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  details: typeof details;
   http: typeof http;
+  lists: typeof lists;
+  reviews: typeof reviews;
   trending: typeof trending;
 }>;
 declare const fullApiWithMounts: typeof fullApi;

@@ -64,62 +64,13 @@ export const trendingResponseSchema = z.object({
 	total_results: z.number()
 });
 
-export type TrendingFilter = z.infer<typeof trendingFilterSchema>;
-export type TrendingTimeWindow = z.infer<typeof trendingTimeWindowSchema>;
-export type TrendingApiItem = z.infer<typeof trendingItemSchema>;
-
-export type TrendingMovie = {
-	mediaType: 'movie';
-	id: number;
-	title: string;
-	originalTitle: string;
-	releaseDate: string;
-	posterPath: string | null;
-	backdropPath: string | null;
-	overview: string;
-	genreIds: number[];
-	originalLanguage: string;
-	popularity: number;
-	voteAverage: number;
-	voteCount: number;
-	video: boolean;
-	adult: boolean;
-};
-
-export type TrendingTV = {
-	mediaType: 'tv';
-	id: number;
-	title: string;
-	originalTitle: string;
-	releaseDate: string;
-	posterPath: string | null;
-	backdropPath: string | null;
-	overview: string;
-	genreIds: number[];
-	originalLanguage: string;
-	popularity: number;
-	voteAverage: number;
-	voteCount: number;
-	originCountry: string[];
-	adult: boolean;
-};
-
-export type TrendingPerson = {
-	mediaType: 'person';
-	id: number;
-	name: string;
-	originalName: string;
-	profilePath: string | null;
-	popularity: number;
-	adult: boolean;
-	knownForDepartment: string;
-	gender: number;
-};
-
-export type Trending<T extends TrendingFilter = 'all'> = T extends 'movie'
-	? TrendingMovie
-	: T extends 'tv'
-		? TrendingTV
-		: T extends 'person'
-			? TrendingPerson
-			: TrendingMovie | TrendingTV | TrendingPerson;
+// Re-export types from types/trending.ts
+export type {
+	TrendingFilter,
+	TrendingTimeWindow,
+	TrendingApiItem,
+	TrendingMovie,
+	TrendingTV,
+	TrendingPerson,
+	Trending
+} from '../types/trending';
